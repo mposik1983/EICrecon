@@ -4,12 +4,16 @@
 #include <JANA/JEventProcessorSequentialRoot.h>
 
 #include <Acts/Surfaces/DiscSurface.hpp>
+#include <Acts/Surfaces/CylinderSurface.hpp>
 
 #include <services/log/Log_service.h>
 #include <extensions/spdlog/SpdlogMixin.h>
 #include <algorithms/tracking/TrackPropagation.h>
 
 #include <TDirectory.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <TNtuple.h>
 
 class JEvent;
 class JApplication;
@@ -48,6 +52,10 @@ public:
     // Only one thread will call this.
     void Finish() override;
 
+    //Some Output NTuples
+    TNtuple *mytup_part;//ntuple of MC and Reconstructed particle p, eta, phi, theta
+    TNtuple *mytup_dirc_traj;//ntuple of track propogation to dirc point: prop. layer position (x, y, z), p, eta, phi, theta
+
 private:
 
     /// Directory to store histograms to
@@ -57,5 +65,6 @@ private:
     eicrecon::TrackPropagation m_propagation_algo;
 
     /// A surface to propagate to
-    std::shared_ptr<Acts::DiscSurface> m_hcal_surface;
+    std::shared_ptr<Acts::DiscSurface> m_pfrich_surface;
+    std::shared_ptr<Acts::CylinderSurface> m_dirc_center_surface;
 };
